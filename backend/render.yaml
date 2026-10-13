@@ -1,0 +1,13 @@
+cat > backend/render.yaml << 'EOF'
+services:
+  - type: web
+    name: housing-affordability-api
+    runtime: python
+    plan: free
+    rootDir: backend
+    buildCommand: pip install --upgrade pip && pip install -r requirements.txt
+    startCommand: uvicorn backend:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.11
+EOF
