@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Indian Housing Price Prediction and Affordability Clustering</title>
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+    <header class="app-header">
+        <div class="header-inner">
+            <h1>Indian Housing Price Prediction</h1>
+            <p class="subtitle">Affordability clustering, predictive horizons, and AI investment intelligence</p>
+        </div>
+    </header>
+
+    <section class="search-section">
+        <div class="search-bar">
+            <input
+                type="text"
+                id="localityInput"
+                placeholder="Enter any Indian locality (e.g., Whitefield, Koramangala, Gachibowli, Andheri). Spelling mistakes are auto-corrected."
+                autocomplete="off"
+            />
+            <select id="citySelect">
+                <option value="">Select City (optional)</option>
+                <option value="Bengaluru">Bengaluru</option>
+                <option value="Hyderabad">Hyderabad</option>
+                <option value="Mumbai">Mumbai</option>
+                <option value="Delhi">Delhi</option>
+                <option value="Pune">Pune</option>
+                <option value="Chennai">Chennai</option>
+                <option value="Kolkata">Kolkata</option>
+                <option value="Ahmedabad">Ahmedabad</option>
+                <option value="Jaipur">Jaipur</option>
+                <option value="Lucknow">Lucknow</option>
+            </select>
+            <button id="searchBtn">Analyze Locality</button>
+        </div>
+        <p id="searchStatus" class="search-status"></p>
+    </section>
+
+    <main class="dashboard">
+
+        <section class="metrics-row" id="metricsRow">
+            <div class="metric-card fade-in"><span class="metric-label">Price per Sq.Ft.</span><span class="metric-value" id="metricPrice">--</span></div>
+            <div class="metric-card fade-in"><span class="metric-label">Typical BHK</span><span class="metric-value" id="metricBhk">--</span></div>
+            <div class="metric-card fade-in" id="tierCard"><span class="metric-label">Affordability Tier</span><span class="metric-value" id="metricTier">--</span></div>
+            <div class="metric-card fade-in"><span class="metric-label">Annual Appreciation</span><span class="metric-value" id="metricAppreciation">--</span></div>
+        </section>
+
+        <section class="split-row">
+            <div class="panel map-panel fade-in">
+                <h2>Locality Map</h2>
+                <p class="panel-desc">Pins color-coded by K-Means affordability tier. The blue ring marks your searched locality.</p>
+                <div id="map"></div>
+            </div>
+
+            <div class="panel forecast-panel fade-in">
+                <h2>Predictive Horizon Engine</h2>
+                <p class="panel-desc">Model-driven forecasts at 6 months, 2 years, and 5 years.</p>
+                <div id="forecastChart">
+                    <div class="forecast-bar" data-horizon="6 Months">
+                        <span class="forecast-label">6 Months</span>
+                        <div class="forecast-track"><div class="forecast-fill" id="forecast6m"></div></div>
+                        <span class="forecast-value" id="forecast6mValue">--</span>
+                    </div>
+                    <div class="forecast-bar" data-horizon="2 Years">
+                        <span class="forecast-label">2 Years</span>
+                        <div class="forecast-track"><div class="forecast-fill" id="forecast2y"></div></div>
+                        <span class="forecast-value" id="forecast2yValue">--</span>
+                    </div>
+                    <div class="forecast-bar" data-horizon="5 Years">
+                        <span class="forecast-label">5 Years</span>
+                        <div class="forecast-track"><div class="forecast-fill" id="forecast5y"></div></div>
+                        <span class="forecast-value" id="forecast5yValue">--</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===================== NEW: ANALYTICS DASHBOARD ===================== -->
+        <section class="panel analytics-panel fade-in">
+            <h2>Statistical Analytics Dashboard</h2>
+            <p class="panel-desc">
+                Distribution, comparative, and trend analytics for the searched locality
+                and its 15 km neighbourhood.
+            </p>
+
+            <div class="analytics-grid">
+
+                <div class="chart-box">
+                    <h3>Price per Sq.Ft.: Locality vs Nearby</h3>
+                    <div class="chart-wrap"><canvas id="chartBarCompare"></canvas></div>
+                </div>
+
+                <div class="chart-box">
+                    <h3>Price Distribution Histogram</h3>
+                    <div class="chart-wrap"><canvas id="chartHistogram"></canvas></div>
+                </div>
+
+                <div class="chart-box">
+                    <h3>BHK Configuration Mix</h3>
+                    <div class="chart-wrap"><canvas id="chartBhkMix"></canvas></div>
+                </div>
+
+                <div class="chart-box">
+                    <h3>5 Year Price Trajectory</h3>
+                    <div class="chart-wrap"><canvas id="chartLineTrend"></canvas></div>
+                </div>
+
+                <div class="chart-box">
+                    <h3>Carpet Area vs Total Price</h3>
+                    <div class="chart-wrap"><canvas id="chartScatter"></canvas></div>
+                </div>
+
+                <div class="chart-box">
+                    <h3>Descriptive Statistics</h3>
+                    <table class="stats-table" id="statsTable">
+                        <tbody>
+                            <tr><td colspan="2" class="placeholder-text">Search a locality to compute statistics.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ===================== NEW: NEARBY COMPARISON ===================== -->
+        <section class="panel nearby-panel fade-in">
+            <h2>Nearby Locality Comparison</h2>
+            <p class="panel-desc">
+                Five real localities within 15 km, ordered by value. Prices are AI estimated; pin locations are geocoded via OpenStreetMap.
+            </p>
+            <div id="nearbyList" class="nearby-list">
+                <p class="placeholder-text">Search a locality to surface nearby alternatives.</p>
+            </div>
+        </section>
+
+        <section class="panel ai-panel fade-in">
+            <h2>AI Investment Assistant</h2>
+            <p class="panel-desc">Ask questions about the selected plot or locality. Powered by Google Gemini.</p>
+            <div class="ai-input-row">
+                <input type="text" id="aiQuery" placeholder="e.g., Is this a good time to buy for rental yield?" />
+                <button id="aiAskBtn">Ask</button>
+            </div>
+            <div class="ai-response" id="aiResponse">
+                <p class="placeholder-text">Search a locality, then ask a question to receive context-aware insights.</p>
+            </div>
+        </section>
+
+        <section class="panel rec-panel fade-in">
+            <h2>Alternative Smart Recommendations</h2>
+            <p class="panel-desc">Nearby localities with superior price-to-value ratios or higher projected appreciation.</p>
+            <div id="recommendations">
+                <p class="placeholder-text">Search a locality to surface alternatives.</p>
+            </div>
+        </section>
+
+        <section class="panel glossary-panel fade-in">
+            <h2>Real Estate Terminology</h2>
+            <div id="glossaryList" class="glossary-grid"></div>
+        </section>
+
+    </main>
+
+    <footer class="app-footer">
+        <p>Data sources: OpenStreetMap, OpenStreetMap Nominatim, Kaggle Indian Housing Datasets, RBI House Price Index. Built with Leaflet, Chart.js, FastAPI, Google Gemini, and R Shiny.</p>
+    </footer>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

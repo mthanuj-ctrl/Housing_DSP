@@ -1,0 +1,167 @@
+/* ==========================================================================
+   ADDITIONS: search status, analytics grid, chart boxes, nearby list, stats
+   ========================================================================== */
+
+.search-status {
+    max-width: 1280px;
+    margin: var(--space-sm) auto 0;
+    font-size: 0.85rem;
+    color: var(--accent-rust);
+    min-height: 1.2em;
+    font-style: italic;
+    transition: opacity var(--transition-med);
+}
+
+.search-status.success { color: var(--accent-teal); font-style: normal; }
+
+/* ---------------- Analytics Grid ---------------- */
+.analytics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: var(--space-lg);
+    margin-top: var(--space-md);
+}
+
+.chart-box {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-light);
+    padding: var(--space-md);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    min-height: 300px;
+}
+
+.chart-box h3 {
+    font-family: var(--font-heading);
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: -0.005em;
+    padding-bottom: var(--space-xs);
+    border-bottom: 1px solid var(--border-light);
+}
+
+.chart-wrap {
+    position: relative;
+    flex: 1;
+    min-height: 220px;
+}
+
+.chart-wrap canvas {
+    display: block;
+    width: 100% !important;
+    height: 100% !important;
+}
+
+/* ---------------- Stats Table ---------------- */
+.stats-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88rem;
+}
+
+.stats-table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border-light);
+    color: var(--text-secondary);
+}
+
+.stats-table td:first-child {
+    font-weight: 600;
+    color: var(--text-primary);
+    width: 55%;
+}
+
+.stats-table td:last-child {
+    font-family: var(--font-mono);
+    text-align: right;
+    color: var(--text-primary);
+}
+
+.stats-table tr:last-child td { border-bottom: none; }
+
+/* ---------------- Nearby List ---------------- */
+.nearby-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: var(--space-md);
+    margin-top: var(--space-sm);
+}
+
+.nearby-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-light);
+    padding: var(--space-md);
+    cursor: pointer;
+    transition: border-color var(--transition-fast),
+                background-color var(--transition-fast);
+    opacity: 0;
+    transform: translateY(8px);
+}
+
+.nearby-card.visible { opacity: 1; transform: translateY(0);
+    transition: opacity var(--transition-med), transform var(--transition-med), border-color var(--transition-fast); }
+
+.nearby-card:hover {
+    border-color: var(--accent-teal);
+    background-color: #f3eee4;
+}
+
+.nearby-card h4 {
+    font-family: var(--font-heading);
+    font-size: 0.95rem;
+    margin-bottom: var(--space-xs);
+    color: var(--text-primary);
+}
+
+.nearby-card .nearby-price {
+    font-family: var(--font-mono);
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--accent-teal);
+    margin-bottom: var(--space-xs);
+}
+
+.nearby-card .nearby-meta {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: var(--space-sm);
+}
+
+.nearby-card .nearby-note {
+    font-size: 0.82rem;
+    color: var(--text-secondary);
+    line-height: 1.55;
+}
+
+.nearby-card .nearby-delta {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    padding: 2px 6px;
+    margin-top: var(--space-sm);
+    border: 1px solid var(--border-light);
+    color: var(--text-secondary);
+}
+
+.nearby-card .nearby-delta.cheaper { color: var(--tier-budget); border-color: var(--tier-budget); }
+.nearby-card .nearby-delta.pricier { color: var(--tier-luxury); border-color: var(--tier-luxury); }
+
+/* ---------------- Searched marker ring ---------------- */
+.searched-ring {
+    animation: ring-pulse 2.2s ease-out infinite;
+}
+
+@keyframes ring-pulse {
+    0%   { box-shadow: 0 0 0 0 rgba(42, 127, 127, 0.55); }
+    70%  { box-shadow: 0 0 0 14px rgba(42, 127, 127, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(42, 127, 127, 0); }
+}
+
+@media (max-width: 640px) {
+    .analytics-grid { grid-template-columns: 1fr; }
+    .chart-box { min-height: 260px; }
+}
